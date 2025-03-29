@@ -11,7 +11,7 @@ from datetime import datetime
 import plotly.graph_objects as go
 
 
-locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+#locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 @st.cache_data
 def draw_header(symbol):
