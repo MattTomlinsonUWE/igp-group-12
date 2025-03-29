@@ -8,4 +8,3 @@ polygon
 datetime
 plotly
 yfinance
-locale
