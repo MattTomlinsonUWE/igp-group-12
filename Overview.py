@@ -3,14 +3,10 @@ import pandas as pd
 import requests
 import time
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
 from pandas import json_normalize
 from polygon import RESTClient
 import os
 from utils import load_symbols
-
-# Step 1 - Retrieve environmental variables
-load_dotenv()
 
 #TO DO - move this to the environment
 POLYGON_API_KEY = "Gby2JUpAVNhvfGbWR29CjzqqIpsRCdN8"
