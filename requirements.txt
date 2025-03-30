@@ -6,4 +6,4 @@ python-dotenv
 pandas
 numpy
 datetime
-plotly
+plotly==5.22.0
