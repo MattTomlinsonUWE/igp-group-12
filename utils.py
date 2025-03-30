@@ -560,20 +560,20 @@ def draw_header_with_yahoo(symbol):
     <table>
         <tr>
             <td><strong>Yesterday Open<strong></td>
-            <td>""" + locale.currency(yesterday_open) + """</td>
+            <td>""" + format_currency(yesterday_open) + """</td>
         </tr>
         </tr>
         <tr>
             <td><strong>Yesterday Close<strong></td>
-            <td>""" + locale.currency(yesterday_close) + """</td>
+            <td>""" + format_currency(yesterday_close) + """</td>
         </tr>
         <tr>
             <td><strong>Yesterday High<strong></td>
-            <td>""" + locale.currency(yesterday_high) + """</td>
+            <td>""" + format_currency(yesterday_high) + """</td>
         </tr>
         <tr>
             <td><strong>Yesterday Low<strong></td>
-            <td>""" + locale.currency(yesterday_low) + """</td>
+            <td>""" + format_currency(yesterday_low) + """</td>
     </table>
     """
 
@@ -605,11 +605,11 @@ def draw_header_with_yahoo(symbol):
         </tr>
         <tr>
             <td><strong>Year High<strong></td>
-            <td>""" + locale.currency(year_high) + """</td>
+            <td>""" + format_currency(year_high) + """</td>
         </tr>
         <tr>
             <td><strong>Year Low<strong></td>
-            <td>""" + locale.currency(year_low) + """</td>
+            <td>""" + format_currency(year_low) + """</td>
         </tr>
     </table>
     """
@@ -633,13 +633,13 @@ def draw_header_with_yahoo(symbol):
     col11, col13, col14, col15 = st.columns(4)
     with col11:
         st.markdown(f"**Last Traded Price:**")
-        st.markdown(f'<p style="font-size:28px">{locale.currency(current_price)} </p>', unsafe_allow_html=True)
+        st.markdown(f'<p style="font-size:28px">{format_currency(current_price)} </p>', unsafe_allow_html=True)
     with col13:
         st.markdown("**Yesterday Price Change:** ")
         if yesterday_change >= 0:
-            st.markdown(f'<p style="font-size:28px;color:green">{locale.currency(yesterday_change)} ({yesterday_change_pct:.2f}%)</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="font-size:28px;color:green">{format_currency(yesterday_change)} ({yesterday_change_pct:.2f}%)</p>', unsafe_allow_html=True)
         else:
-            st.markdown(f'<p style="font-size:28px;color:red">{locale.currency(yesterday_change)} ({yesterday_change_pct:.2f}%)</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="font-size:28px;color:red">{format_currency(yesterday_change)} ({yesterday_change_pct:.2f}%)</p>', unsafe_allow_html=True)
 
     with col14:
         st.markdown(table_1_html_code, unsafe_allow_html=True)
@@ -669,7 +669,7 @@ def draw_header_with_yahoo(symbol):
     <table>
         <tr>
             <td><strong>Dividend<strong></td>
-            <td>""" + locale.currency(dividend) + """</td>
+            <td>""" + format_currency(dividend) + """</td>
         </tr>
         <tr>
             <td><strong>Ex-dividend date<strong></td>
@@ -710,11 +710,11 @@ def draw_header_with_yahoo(symbol):
         </tr>
         <tr>
             <td><strong>Revenue<strong></td>
-            <td>""" + locale.currency(revenue) + """</td>
+            <td>""" + format_currency(revenue) + """</td>
         </tr>
         <tr>
             <td><strong>Net Income<strong></td>
-            <td>""" + locale.currency(net_income) + """</td>
+            <td>""" + format_currency(net_income) + """</td>
         </tr>
         <tr>
             <td><strong>PE Ratio<strong></td>
@@ -722,11 +722,11 @@ def draw_header_with_yahoo(symbol):
         </tr>
         <tr>
             <td><strong>Earnings per Share<strong></td>
-            <td>""" + locale.currency(eps) + """</td>
+            <td>""" + format_currency(eps) + """</td>
         </tr>
         <tr>
             <td><strong>Revenue per Share<strong></td>
-            <td>""" + locale.currency(rps) + """</td>
+            <td>""" + format_currency(rps) + """</td>
         </tr>
     </table>
     """
@@ -909,3 +909,6 @@ def get_company_logo_url(symbol):
 def load_symbols():
     symbols = pd.read_csv("data/nasdaqlisted.csv", sep='|')
     return symbols 
+
+def format_currency(value, symbol="$"):
+    return f"{symbol}{value:,.2f}"
