@@ -17,7 +17,7 @@ POLYGON_API_KEY = "Gby2JUpAVNhvfGbWR29CjzqqIpsRCdN8"
 
 # Step 2 - Set up the UI 
 st.set_page_config(
-    page_title="Stock Seasonality Application",
+    page_title="Stock Seasonality Application.",
     page_icon="chart_with_upwards_trend",
     layout="wide",
 )
