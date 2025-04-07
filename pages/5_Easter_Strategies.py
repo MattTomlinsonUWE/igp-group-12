@@ -4,7 +4,7 @@ from utils import load_symbols
 
 # Step 2 - Set up the UI 
 st.set_page_config(
-    page_title="Stock Seasonality Application - Sell in May Strategies",
+    page_title="Stock Seasonality Application - Easter Strategies",
     page_icon="chart_with_upwards_trend",
     layout="wide",
 )
@@ -35,6 +35,6 @@ if params("symbol"):
 
 st.write("# Stock Market Seasonality Strategies")
 
-st.write("## 'Sell in May' Strategies")
+st.write("## Easter Strategies")
 
 draw_header_with_yahoo(symbol)

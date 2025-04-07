@@ -17,12 +17,12 @@ POLYGON_API_KEY = "Gby2JUpAVNhvfGbWR29CjzqqIpsRCdN8"
 
 # Step 2 - Set up the UI 
 st.set_page_config(
-    page_title="Stock Seasonality Application.",
+    page_title="Stock Seasonality Application",
     page_icon="chart_with_upwards_trend",
     layout="wide",
 )
 
-st.write("# Stock Market Seasonality Strategies.")
+st.write("# Stock Market Seasonality Strategies")
 
 st.markdown(
     """
@@ -77,6 +77,9 @@ if os.path.exists(csv_path):
                     if col_name == "Sell in May":
                         st.session_state['ticker'] = row['Ticker']
                         st.switch_page("pages/4_Sell in May Strategies.py")
+                    if col_name == "Easter":
+                        st.session_state['ticker'] = row['Ticker']
+                        st.switch_page("pages/5_Easter_Strategies.py")
 
 else:
     st.error(f"File '{csv_path}' not found. Please make sure it exists in the app directory.")
