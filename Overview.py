@@ -22,7 +22,7 @@ st.set_page_config(
     layout="wide",
 )
 
-st.write("# Stock Market Seasonality Strategies")
+st.write("# Stock Market Seasonality Strategies.")
 
 st.markdown(
     """
