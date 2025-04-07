@@ -9,22 +9,29 @@ st.set_page_config(
     layout="wide",
 )
 
-# Read query parameters
+# Default symbol
 symbol = "AAPL"
-
-params = st.query_params.get_all
-
-if params("symbol"):
-    symbol = params("symbol")[0].upper()
 
 # Set-up symbol picker 
 symbols = load_symbols()
 
+# Retrieve symbol from session state
+if st.session_state['ticker'] is not None: 
+    symbol = st.session_state['ticker']
+
+# Retrieve symbol from query params
+params = st.query_params.get_all
+
 # Extract unique stock tickers for autocomplete
 tickers = symbols["Symbol"].unique().tolist()
 
+tickers_idx = tickers.index(symbol)
+
 with st.sidebar:
-    symbol = st.selectbox("Search for a Stock Ticker", tickers)    
+    symbol = st.selectbox("Search for a Stock Ticker", tickers, index=tickers_idx)
+    
+if params("symbol"):
+    symbol = params("symbol")[0].upper()   
     
 st.write("# Stock Market Seasonality Strategies")
 

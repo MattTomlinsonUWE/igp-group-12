@@ -1,3 +1,16 @@
-﻿Stock ,Strategy 1,Strategy 2,Strategy 3,Strategy 4,Strategy 5
-AAPL,Positive,Positive,Positive,Positive,Positive
-MSFT,Positive,Positive,Positive,Positive,Positive
+﻿Ticker,Stock,Easter,Sell in May
+AAPL,Apple,Positive,Null
+AME,AMETEK Inc,Null,Positive
+AMZN,Amazon,Positive,Null
+CBRE,CBRE Group Inc,Null,Positive
+EL,"Estee Lauder",Null,Positive
+EMN,Eastman Chemical Company,Null,Positive
+EW,Edwards Lifesciences Corporation,Null,Positive
+MLM,Martin Marietta Materials,Null,Positive
+MSFT,Microsoft,Positive,Null
+PH,Parker-Hannifin Corporation,Null,Positive
+RTX,RTX Corporation,Null,Positive
+TPR,Tapestry Inc,Null,Positive
+TSLA,Tesla,Positive,Null
+WMT,Walmart,Positive,Null
+WYNN,Wynn Resorts,Null,Positive
