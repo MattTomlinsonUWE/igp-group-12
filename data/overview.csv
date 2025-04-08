@@ -1,16 +1,16 @@
-﻿Ticker,Stock,Easter,Sell in May
-AAPL,Apple,Positive,Null
-AME,AMETEK Inc,Null,Positive
-AMZN,Amazon,Positive,Null
-CBRE,CBRE Group Inc,Null,Positive
-EL,"Estee Lauder",Null,Positive
-EMN,Eastman Chemical Company,Null,Positive
-EW,Edwards Lifesciences Corporation,Null,Positive
-MLM,Martin Marietta Materials,Null,Positive
-MSFT,Microsoft,Positive,Null
-PH,Parker-Hannifin Corporation,Null,Positive
-RTX,RTX Corporation,Null,Positive
-TPR,Tapestry Inc,Null,Positive
-TSLA,Tesla,Positive,Null
-WMT,Walmart,Positive,Null
-WYNN,Wynn Resorts,Null,Positive
+﻿Ticker,Stock,Christmas,Easter,Sell in May
+AAPL,Apple,Null,Positive,Null
+AME,AMETEK Inc,Null,Null,Positive
+AMZN,Amazon,Null,Positive,Null
+CBRE,CBRE Group Inc,Null,Null,Positive
+EL,"Estee Lauder",Null,Null,Positive
+EMN,Eastman Chemical Company,Null,Null,Positive
+EW,Edwards Lifesciences Corporation,Null,Null,Positive
+MLM,Martin Marietta Materials,Null,Null,Positive
+MSFT,Microsoft,Null,Positive,Null
+PH,Parker-Hannifin Corporation,Null,Null,Positive
+RTX,RTX Corporation,Null,Null,Positive
+TPR,Tapestry Inc,Null,Null,Positive
+TSLA,Tesla,Null,Positive,Null
+WMT,Walmart,Null,Positive,Null
+WYNN,Wynn Resorts,Null,Null,Positive

@@ -80,6 +80,9 @@ if os.path.exists(csv_path):
                     if col_name == "Easter":
                         st.session_state['ticker'] = row['Ticker']
                         st.switch_page("pages/5_Easter_Strategies.py")
+                    if col_name == "Christmas":
+                        st.session_state['ticker'] = row['Ticker']
+                        st.switch_page("pages/6_Christmas_Strategies.py")
 
 else:
     st.error(f"File '{csv_path}' not found. Please make sure it exists in the app directory.")
