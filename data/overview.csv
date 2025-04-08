@@ -1,7 +1,7 @@
 ﻿Ticker,Stock,Christmas,Easter,Sell in May
 AAPL,Apple,Null,Positive,Null
 AME,AMETEK Inc,Null,Null,Positive
-AMZN,Amazon,Null,Positive,Null
+AMZN,Amazon,Positive,Positive,Null
 CBRE,CBRE Group Inc,Null,Null,Positive
 EL,"Estee Lauder",Null,Null,Positive
 EMN,Eastman Chemical Company,Null,Null,Positive
