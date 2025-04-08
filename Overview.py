@@ -66,8 +66,10 @@ if os.path.exists(csv_path):
     for i, row in df.iterrows():
         cols = st.columns(len(row))
         for j, (col_name, cell_value) in enumerate(row.items()):
-            if col_name == "Ticker" or col_name == "Stock" or cell_value == " ":
+            if col_name == "Ticker" or col_name == "Stock":
                 cols[j].write(f"**{cell_value}**")  # Just display ticker
+            elif cell_value == " ":
+                pass
             else:
                 # Create a unique key for each button
                 key = f"{row['Ticker']}_{col_name}_{i}"

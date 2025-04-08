@@ -105,17 +105,21 @@ long_term_volume = analyze_volume_spike(symbol)
 
 st.write("### Long-Term Dividend Strategies")
 st.write("#### Is trading volume greater in dividend period?")
-if long_term_volume["AvgVolumeSpikeNonDiv"] >= long_term_volume["AvgVolumeSpikeDiv"]:
-    st.write(f"No, trading volume is less during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
-    st.write("Therefore **no extra caution** is required when trading.")
-else:
-    st.write(f"Yes, trading volume is more during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
-    st.write("Therefore **extra caution** is required when trading.")
+if long_term_volume is not None:
+    if long_term_volume["AvgVolumeSpikeNonDiv"] >= long_term_volume["AvgVolumeSpikeDiv"]:
+        st.write(f"No, trading volume is less during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
+        st.write("Therefore **no extra caution** is required when trading.")
+    else:
+        st.write(f"Yes, trading volume is more during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
+        st.write("Therefore **extra caution** is required when trading.")
 
-st.write(f" - Average Volume Spike in Dividend Period: {long_term_volume["AvgVolumeSpikeDiv"]}")
-st.write(f" - Average Volume Spike in Non-Dividend Period: {long_term_volume["AvgVolumeSpikeNonDiv"]}")
+    st.write(f" - Average Volume Spike in Dividend Period: {long_term_volume["AvgVolumeSpikeDiv"]}")
+    st.write(f" - Average Volume Spike in Non-Dividend Period: {long_term_volume["AvgVolumeSpikeNonDiv"]}")
+else:
+    st.write("No dividends in period.")
 
 st.write("#### Is price volatility greater in dividend period?")
+
 # Use Yahoo Finance and Polygon to determine if we have extra trading volume 
 def analyze_price_volatility(ticker_symbol, period="5y", window=20, days_before=3, days_after=3):
     try:
@@ -175,19 +179,22 @@ def analyze_price_volatility(ticker_symbol, period="5y", window=20, days_before=
 
 long_term_price = analyze_price_volatility(symbol)
 
-if long_term_price["AvgVolumeSpikeNonDiv"] >= long_term_price["AvgVolumeSpikeDiv"]:
-    st.write(f"No, price volatility is less during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
-    st.write("Therefore **no extra caution** is required when trading.")
-else:
-    st.write(f"Yes, price volatility is more during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
-    st.write("Therefore **extra caution** is required when trading.")
+if long_term_price is not None:
+    if long_term_price["AvgVolumeSpikeNonDiv"] >= long_term_price["AvgVolumeSpikeDiv"]:
+        st.write(f"No, price volatility is less during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
+        st.write("Therefore **no extra caution** is required when trading.")
+    else:
+        st.write(f"Yes, price volatility is more during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
+        st.write("Therefore **extra caution** is required when trading.")
 
-st.write(f" - Average Price Spike in Dividend Period: {long_term_price["AvgVolumeSpikeDiv"]}")
-st.write(f" - Average Price Spike in Non-Dividend Period: {long_term_price["AvgVolumeSpikeNonDiv"]}")
+    st.write(f" - Average Price Spike in Dividend Period: {long_term_price["AvgVolumeSpikeDiv"]}")
+    st.write(f" - Average Price Spike in Non-Dividend Period: {long_term_price["AvgVolumeSpikeNonDiv"]}")
+else:
+    st.write("No dividends in period.")
 
 st.write("#### Is the stock historically under/overpriced during period")
-# Use Yahoo Finance and Polygon to determine if we have extra trading volume 
-def analyze_dividend_return_behavior(ticker_symbol, period="5y", window=20, days_before=3, days_after=3):
+# Use Yahoo Finance and Polygon to determine if the stock price varies  
+def analyze_dividend_price_behavior(ticker_symbol, period="5y", window=20, days_before=3, days_after=3):
     try:
         ticker = yf.Ticker(ticker_symbol)
         hist = ticker.history(period=period)
@@ -253,20 +260,26 @@ def analyze_dividend_return_behavior(ticker_symbol, period="5y", window=20, days
     except Exception as e:
         return {"Ticker": ticker_symbol, "Error": str(e)}
 
-long_term_return = analyze_dividend_return_behavior(symbol)
+long_term_return = analyze_dividend_price_behavior(symbol)
 
-if long_term_return["AvgPriceNonDiv"] >= long_term_return["AvgPriceDiv"]:
-    st.write(f"The average price is less during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
-    st.write("Consider buying during this time.")
-else:
-    st.write(f"The average price is more during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
-    st.write("Consider waiting until this time is over.")
-    st.write("TO DO - evaluate the merit of this strategy.")
+if long_term_return is not None:
+    if long_term_return["AvgPriceNonDiv"] >= long_term_return["AvgPriceDiv"]:
+        st.write(f"The average price is less during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
+        st.write("Consider buying during this time.")
+    else:
+        st.write(f"The average price is more during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
+        st.write("Consider waiting until this time is over.")
+        st.write("TO DO - evaluate the merit of this strategy.")
 
-st.write(f" - Average Price in Dividend Period (excluding dividend): {long_term_return["AvgPriceDiv"]}")
-st.write(f" - Average Price in Non-Dividend Period: {long_term_return["AvgPriceNonDiv"]}")
-
+    st.write(f" - Average Price in Dividend Period (excluding dividend): {long_term_return["AvgPriceDiv"]}")
+    st.write(f" - Average Price in Non-Dividend Period: {long_term_return["AvgPriceNonDiv"]}")
+else: 
+    st.write("No dividends in period.")
 
 st.write("### Short-Term Dividend Strategies")
 
+st.write("#### Dividend capture")
 
+st.write("#### Pre ex-dividend surge")
+
+st.write("#### Post ex-dividend recovery")
