@@ -388,7 +388,7 @@ def draw_header(symbol):
                 st.exception(f"Exception: {e}") 
 
 
-def draw_header_with_yahoo(symbol):
+def draw_header_with_yahoo(symbol,minimal=False):
 
     ticker = yf.Ticker(symbol)
 
@@ -646,250 +646,251 @@ def draw_header_with_yahoo(symbol):
     with col15:
         st.markdown(table_2_html_code, unsafe_allow_html=True)
 
-    # Set up the tabs
-    tab1, tab3, tab4  = st.tabs(["Overview", "Dividend", "Chart"])
+    if minimal is True:
+        # Set up the tabs
+        tab1, tab3, tab4  = st.tabs(["Overview", "Dividend", "Chart"])
 
-    table_3_html_code = """
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid white;
-            margin-bottom:25px;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        tr:nth-child(even) {
-            background-color: #f0f0f0;  /* Light gray for alternate rows */
-        }
-    </style>
+        table_3_html_code = """
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                border: 1px solid white;
+                margin-bottom:25px;
+            }
+            th, td {
+                padding: 10px;
+                text-align: left;
+            }
+            tr:nth-child(even) {
+                background-color: #f0f0f0;  /* Light gray for alternate rows */
+            }
+        </style>
 
-    <table>
-        <tr>
-            <td><strong>Dividend<strong></td>
-            <td>""" + format_currency(dividend) + """</td>
-        </tr>
-        <tr>
-            <td><strong>Ex-dividend date<strong></td>
-            <td>""" + str(ex_dividend_date) + """</td>
-        </tr>
-        <tr>
-            <td><strong>Pay date<strong></td>
-            <td>""" + str(dividend_pay_date) + """</td>
-        </tr>
-        <tr>
-            <td><strong>Dividend yield (%)<strong></td>
-            <td>""" + str(round(dividend_yield, 2)) + """</td>
-        </tr>
-    </table>
-    """
+        <table>
+            <tr>
+                <td><strong>Dividend<strong></td>
+                <td>""" + format_currency(dividend) + """</td>
+            </tr>
+            <tr>
+                <td><strong>Ex-dividend date<strong></td>
+                <td>""" + str(ex_dividend_date) + """</td>
+            </tr>
+            <tr>
+                <td><strong>Pay date<strong></td>
+                <td>""" + str(dividend_pay_date) + """</td>
+            </tr>
+            <tr>
+                <td><strong>Dividend yield (%)<strong></td>
+                <td>""" + str(round(dividend_yield, 2)) + """</td>
+            </tr>
+        </table>
+        """
 
-    table_4_html_code = """
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid white;
-            margin-bottom:25px;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        tr:nth-child(even) {
-            background-color: #f0f0f0;  /* Light gray for alternate rows */
-        }
-    </style>
+        table_4_html_code = """
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                border: 1px solid white;
+                margin-bottom:25px;
+            }
+            th, td {
+                padding: 10px;
+                text-align: left;
+            }
+            tr:nth-child(even) {
+                background-color: #f0f0f0;  /* Light gray for alternate rows */
+            }
+        </style>
 
-    <table>
-        <tr>
-            <td><strong>Filing Date<strong></td>
-            <td>""" + str(filing_date) + """</td>
-        </tr>
-        <tr>
-            <td><strong>Revenue<strong></td>
-            <td>""" + format_currency(revenue) + """</td>
-        </tr>
-        <tr>
-            <td><strong>Net Income<strong></td>
-            <td>""" + format_currency(net_income) + """</td>
-        </tr>
-        <tr>
-            <td><strong>PE Ratio<strong></td>
-            <td>""" + str(pe_ratio) + """</td>
-        </tr>
-        <tr>
-            <td><strong>Earnings per Share<strong></td>
-            <td>""" + format_currency(eps) + """</td>
-        </tr>
-        <tr>
-            <td><strong>Revenue per Share<strong></td>
-            <td>""" + format_currency(rps) + """</td>
-        </tr>
-    </table>
-    """
+        <table>
+            <tr>
+                <td><strong>Filing Date<strong></td>
+                <td>""" + str(filing_date) + """</td>
+            </tr>
+            <tr>
+                <td><strong>Revenue<strong></td>
+                <td>""" + format_currency(revenue) + """</td>
+            </tr>
+            <tr>
+                <td><strong>Net Income<strong></td>
+                <td>""" + format_currency(net_income) + """</td>
+            </tr>
+            <tr>
+                <td><strong>PE Ratio<strong></td>
+                <td>""" + str(pe_ratio) + """</td>
+            </tr>
+            <tr>
+                <td><strong>Earnings per Share<strong></td>
+                <td>""" + format_currency(eps) + """</td>
+            </tr>
+            <tr>
+                <td><strong>Revenue per Share<strong></td>
+                <td>""" + format_currency(rps) + """</td>
+            </tr>
+        </table>
+        """
 
-    with tab1:
-        st.subheader('Last Financials')
+        with tab1:
+            st.subheader('Last Financials')
 
-        st.markdown(table_4_html_code, unsafe_allow_html=True)
+            st.markdown(table_4_html_code, unsafe_allow_html=True)
 
-    with tab3:
+        with tab3:
 
-        if not symbol.strip():
-            st.error("Please select a symbol")
-        else:
-            try:
-                st.subheader('Latest Dividend Information')
+            if not symbol.strip():
+                st.error("Please select a symbol")
+            else:
+                try:
+                    st.subheader('Latest Dividend Information')
 
-                st.markdown(table_3_html_code, unsafe_allow_html=True)
+                    st.markdown(table_3_html_code, unsafe_allow_html=True)
 
-                st.subheader("Dividend History")
-                st.dataframe(dividend_table, hide_index=True)
+                    st.subheader("Dividend History")
+                    st.dataframe(dividend_table, hide_index=True)
 
-            except Exception as e:
-                st.exception(f"Exception: {e}")
-    
-    with tab4:
-        if not symbol.strip():
-            st.error("Please select a symbol")
-        else:
-            st.subheader("Price History")
-            
-            # Get the list of events
-            events_df = pd.read_csv("data/us_holidays_events_20yrs.csv")
-            events_df["Date"] = pd.to_datetime(events_df["Date"])
-            
-            start_date = st.date_input("Start Date", pd.to_datetime("2023-01-01"))
-            end_date = st.date_input("End Date", pd.to_datetime("today"))
+                except Exception as e:
+                    st.exception(f"Exception: {e}")
+        
+        with tab4:
+            if not symbol.strip():
+                st.error("Please select a symbol")
+            else:
+                st.subheader("Price History")
+                
+                # Get the list of events
+                events_df = pd.read_csv("data/us_holidays_events_20yrs.csv")
+                events_df["Date"] = pd.to_datetime(events_df["Date"])
+                
+                start_date = st.date_input("Start Date", pd.to_datetime("2023-01-01"))
+                end_date = st.date_input("End Date", pd.to_datetime("today"))
 
-            if ticker:
-                # Load historical data
-                hist = ticker.history(start=start_date, end=end_date)
+                if ticker:
+                    # Load historical data
+                    hist = ticker.history(start=start_date, end=end_date)
 
-                if not hist.empty:
-                   # Create Plotly figure
-                    fig = go.Figure()
+                    if not hist.empty:
+                    # Create Plotly figure
+                        fig = go.Figure()
 
-                    # Line for Close price
-                    fig.add_trace(go.Scatter(
-                        x=hist.index,
-                        y=hist["Close"],
-                        mode="lines",
-                        name="Close Price"
-                    ))
+                        # Line for Close price
+                        fig.add_trace(go.Scatter(
+                            x=hist.index,
+                            y=hist["Close"],
+                            mode="lines",
+                            name="Close Price"
+                        ))
 
-                     # Strip timezone from hist.index
-                    hist.index = hist.index.tz_localize(None)
+                        # Strip timezone from hist.index
+                        hist.index = hist.index.tz_localize(None)
 
-                    # Filter holidays to match chart range
-                    holiday_events = events_df[
-                       (events_df["Date"] >= hist.index.min()) &
-                        (events_df["Date"] <= hist.index.max())
-                    ]
-
-                   # Add annotations for each holiday
-                    for _, row in holiday_events.iterrows():
-                        event_date = row["Date"]
-                        label = f"{row['Icon']}" if row["Icon"] else row["Event"]
-
-                        # Find nearest date in stock data
-                        closest_idx = hist.index.get_indexer([event_date], method='nearest')[0]
-                        plot_date = hist.index[closest_idx]
-                        price = hist["Close"].iloc[closest_idx]
-
-                        fig.add_annotation(
-                            x=plot_date,
-                            y=price,
-                            text=label,
-                            showarrow=True,
-                           arrowhead=2,
-                           ax=0,
-                            ay=-40
-                        )
-
-                    #dividend_table
-                    # Filter dividends to match chart range
-                    if len(dividend_table) > 0:
-                        dividend_table["Pay Date"] = pd.to_datetime(dividend_table["Pay Date"])
-                        dividend_table = dividend_table[
-                           (dividend_table["Pay Date"] >= hist.index.min()) &
-                            (dividend_table["Pay Date"] <= hist.index.max())
+                        # Filter holidays to match chart range
+                        holiday_events = events_df[
+                        (events_df["Date"] >= hist.index.min()) &
+                            (events_df["Date"] <= hist.index.max())
                         ]
 
-                        for _, row in dividend_table.iterrows():
-                            declaration_date = row["Declaration Date"]
-                            ex_date = row["Ex-Dividend Date"]
-                            pay_date = row["Pay Date"]
-                            price = 0
-                        
-                            # Find closest trading day in data
-                            if declaration_date in hist.index:
-                                 price = hist.loc[declaration_date, "Close"]
-                            else:
-                                closest_idx = hist.index.get_indexer([declaration_date], method='nearest')[0]
-                                declaration_date = hist.index[closest_idx]
-                                price = hist["Close"].iloc[closest_idx]
+                    # Add annotations for each holiday
+                        for _, row in holiday_events.iterrows():
+                            event_date = row["Date"]
+                            label = f"{row['Icon']}" if row["Icon"] else row["Event"]
+
+                            # Find nearest date in stock data
+                            closest_idx = hist.index.get_indexer([event_date], method='nearest')[0]
+                            plot_date = hist.index[closest_idx]
+                            price = hist["Close"].iloc[closest_idx]
 
                             fig.add_annotation(
-                                x=declaration_date,
+                                x=plot_date,
                                 y=price,
-                                text="📣",  # or use "📤", "💰", etc.
+                                text=label,
                                 showarrow=True,
-                                arrowhead=2,
-                                ax=0,
-                                ay=-40
-                            )
-                        
-                            # Find closest trading day in data
-                            if ex_date in hist.index:
-                                 price = hist.loc[ex_date, "Close"]
-                            else:
-                                closest_idx = hist.index.get_indexer([ex_date], method='nearest')[0]
-                                ex_date = hist.index[closest_idx]
-                                price = hist["Close"].iloc[closest_idx]
-
-                            fig.add_annotation(
-                                x=ex_date,
-                                y=price,
-                                text="⚠️",  # or use "📤", "💰", etc.
-                                showarrow=True,
-                                arrowhead=2,
-                                ax=0,
-                                ay=-40
-                            )
-                        
-                            # Find closest trading day in data
-                            if pay_date in hist.index:
-                                 price = hist.loc[pay_date, "Close"]
-                            else:
-                                closest_idx = hist.index.get_indexer([pay_date], method='nearest')[0]
-                                pay_date = hist.index[closest_idx]
-                                price = hist["Close"].iloc[closest_idx]
-
-                            fig.add_annotation(
-                                x=pay_date,
-                                y=price,
-                                text="💰",  # or use "📤", "💰", etc.
-                                showarrow=True,
-                                arrowhead=2,
-                                ax=0,
+                            arrowhead=2,
+                            ax=0,
                                 ay=-40
                             )
 
-                    # Layout
-                    fig.update_layout(
-                        xaxis_title="Date",
-                        yaxis_title="Price (USD)",
-                        hovermode="x"
-                    )
+                        #dividend_table
+                        # Filter dividends to match chart range
+                        if len(dividend_table) > 0:
+                            dividend_table["Pay Date"] = pd.to_datetime(dividend_table["Pay Date"])
+                            dividend_table = dividend_table[
+                            (dividend_table["Pay Date"] >= hist.index.min()) &
+                                (dividend_table["Pay Date"] <= hist.index.max())
+                            ]
 
-                    # Show chart
-                    st.plotly_chart(fig, use_container_width=True)
-                else:
-                   st.warning("No data found for this ticker and date range.")
+                            for _, row in dividend_table.iterrows():
+                                declaration_date = row["Declaration Date"]
+                                ex_date = row["Ex-Dividend Date"]
+                                pay_date = row["Pay Date"]
+                                price = 0
+                            
+                                # Find closest trading day in data
+                                if declaration_date in hist.index:
+                                    price = hist.loc[declaration_date, "Close"]
+                                else:
+                                    closest_idx = hist.index.get_indexer([declaration_date], method='nearest')[0]
+                                    declaration_date = hist.index[closest_idx]
+                                    price = hist["Close"].iloc[closest_idx]
+
+                                fig.add_annotation(
+                                    x=declaration_date,
+                                    y=price,
+                                    text="📣",  # or use "📤", "💰", etc.
+                                    showarrow=True,
+                                    arrowhead=2,
+                                    ax=0,
+                                    ay=-40
+                                )
+                            
+                                # Find closest trading day in data
+                                if ex_date in hist.index:
+                                    price = hist.loc[ex_date, "Close"]
+                                else:
+                                    closest_idx = hist.index.get_indexer([ex_date], method='nearest')[0]
+                                    ex_date = hist.index[closest_idx]
+                                    price = hist["Close"].iloc[closest_idx]
+
+                                fig.add_annotation(
+                                    x=ex_date,
+                                    y=price,
+                                    text="⚠️",  # or use "📤", "💰", etc.
+                                    showarrow=True,
+                                    arrowhead=2,
+                                    ax=0,
+                                    ay=-40
+                                )
+                            
+                                # Find closest trading day in data
+                                if pay_date in hist.index:
+                                    price = hist.loc[pay_date, "Close"]
+                                else:
+                                    closest_idx = hist.index.get_indexer([pay_date], method='nearest')[0]
+                                    pay_date = hist.index[closest_idx]
+                                    price = hist["Close"].iloc[closest_idx]
+
+                                fig.add_annotation(
+                                    x=pay_date,
+                                    y=price,
+                                    text="💰",  # or use "📤", "💰", etc.
+                                    showarrow=True,
+                                    arrowhead=2,
+                                    ax=0,
+                                    ay=-40
+                                )
+
+                        # Layout
+                        fig.update_layout(
+                            xaxis_title="Date",
+                            yaxis_title="Price (USD)",
+                            hovermode="x"
+                        )
+
+                        # Show chart
+                        st.plotly_chart(fig, use_container_width=True)
+                    else:
+                        st.warning("No data found for this ticker and date range.")
 
 
 def get_company_logo_url(symbol):
