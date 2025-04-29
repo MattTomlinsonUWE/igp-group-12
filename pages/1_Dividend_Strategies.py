@@ -38,7 +38,7 @@ tickers = symbols["Symbol"].unique().tolist()
 
 tickers_idx = tickers.index(symbol)
 
-# Draw the tickers list and the disclaimer on the sidebar
+# Draw the tickers list on the sidebar
 with st.sidebar:
     symbol = st.selectbox("Search for a Stock Ticker", tickers, index=tickers_idx)
     st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in teh event that you do, no liability will be accepted for any losses.")
@@ -48,6 +48,9 @@ st.write("# Stock Market Seasonality Strategies")
 st.write("## Dividend Strategies")
 
 draw_header_with_yahoo(symbol)
+
+st.write("## Strategy Overview")
+st.write("TO DO")
 
 POLYGON_API_KEY = "Gby2JUpAVNhvfGbWR29CjzqqIpsRCdN8"
 
@@ -236,8 +239,8 @@ def analyze_dividend_price_behavior(ticker_symbol, period="5y", window=20, days_
         if len(close_div) < 5 or len(close_non_div) < 20:
             return {
                 "Ticker": ticker_symbol,
-                "Avg Return (Div)": None,
-                "Avg Return (Non-Div)": None,
+                "AvgPriceDiv": None,
+                "AvgPriceNonDiv": None,
                 "Return Diff (%)": None,
                 "P-Value": None
             }
@@ -284,3 +287,4 @@ st.write("#### Dividend capture")
 st.write("#### Pre ex-dividend surge")
 
 st.write("#### Post ex-dividend recovery")
+
