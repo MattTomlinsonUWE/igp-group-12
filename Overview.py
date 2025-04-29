@@ -26,71 +26,24 @@ st.set_page_config(
 with st.sidebar:
     st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in teh event that you do, no liability will be accepted for any losses.")
 
-st.write("# Stock Market Seasonality Strategies")
+st.write("# Stock pricing seasonality exploration")
 
 st.markdown(
     """
-    Here are some of the seasonality strategies we have created
+    Most non-professional stock market investors fail to realise the impact that seasonal trends have on the price of the shares that they buy and sell. 
+
+    The price of a share can often be significantly above-trend during periods such as before an earning announcement, or depressed in a run up to a dividend payment. 
+
+    This can also happen at certain periods of the year, such as around Christmas and Easter holidays. 
+
+    For some shares this can be predicted with reasonable certainty, leading to not only to be able to buy and sell at the most advantageous time, but also to potentially employ short-term trading strategies.   
+
+    For each of the most common strategies we've outlined the main effects, and also compiled our top picks. 
     
+    Click the left hand menu to learn more.  
+
     """
     )
 
-st.markdown("""
-    <style>
-        th {
-            text-align: left !important;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
-# Path to the CSV file
-csv_path = "./data/overview.csv"
-
-# Check if file exists
-if os.path.exists(csv_path):
-    # Load the CSV file
-    df = pd.read_csv(csv_path)
-    
-    # We do a little cleanup on the table
-    df.replace("Null", " ", inplace=True)
-
-    # Display data
-    #st.subheader("Sample Results")
-    #st.markdown(
-    #    df.to_html(index=False, escape=False),
-    #    unsafe_allow_html=True
-    #)
-
-    # Draw header row
-    header_cols = st.columns(len(df.columns))
-    for col, col_name in zip(header_cols, df.columns):
-        col.markdown(f"**{col_name}**")  # Bold headers
-
-    # Build table manually
-    for i, row in df.iterrows():
-        cols = st.columns(len(row))
-        for j, (col_name, cell_value) in enumerate(row.items()):
-            if col_name == "Ticker" or col_name == "Stock":
-                cols[j].write(f"**{cell_value}**")  # Just display ticker
-            elif cell_value == " ":
-                pass
-            else:
-                # Create a unique key for each button
-                key = f"{row['Ticker']}_{col_name}_{i}"
-                if cols[j].button(cell_value, key=key):
-                    st.success(f"Clicked: {row['Ticker']} - '{col_name}' = {cell_value}")
-                    # You can trigger any custom action here
-                    if col_name == "Sell in May":
-                        st.session_state['ticker'] = row['Ticker']
-                        st.switch_page("pages/4_Sell in May Strategies.py")
-                    if col_name == "Easter":
-                        st.session_state['ticker'] = row['Ticker']
-                        st.switch_page("pages/5_Easter_Strategies.py")
-                    if col_name == "Christmas":
-                        st.session_state['ticker'] = row['Ticker']
-                        st.switch_page("pages/6_Christmas_Strategies.py")
-
-else:
-    st.error(f"File '{csv_path}' not found. Please make sure it exists in the app directory.")
 
 
