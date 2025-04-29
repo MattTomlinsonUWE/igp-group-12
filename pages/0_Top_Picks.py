@@ -24,7 +24,7 @@ st.set_page_config(
 
 # Display the disclaimer
 with st.sidebar:
-    st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in teh event that you do, no liability will be accepted for any losses.")
+    st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in the event that you do, no liability will be accepted for any losses.")
 
 st.write("# Top Picks")
 

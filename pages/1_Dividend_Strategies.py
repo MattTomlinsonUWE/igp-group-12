@@ -41,7 +41,7 @@ tickers_idx = tickers.index(symbol)
 # Draw the tickers list on the sidebar
 with st.sidebar:
     symbol = st.selectbox("Search for a Stock Ticker", tickers, index=tickers_idx)
-    st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in teh event that you do, no liability will be accepted for any losses.")
+    st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in the event that you do, no liability will be accepted for any losses.")
 
 # Write the titles    
 st.write("# Stock Market Seasonality Strategies")
