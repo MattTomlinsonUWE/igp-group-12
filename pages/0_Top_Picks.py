@@ -26,20 +26,38 @@ st.set_page_config(
 with st.sidebar:
     st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in teh event that you do, no liability will be accepted for any losses.")
 
-st.write("# Stock Market Seasonality Strategies")
+st.write("# Top Picks")
 
 st.markdown(
     """
-    Here are some of the seasonality strategies we have created
-    
+    Based on our analysis, these are the stocks where we feel there are the most exploitable patterns of seasonality. 
     """
     )
 
 st.markdown("""
     <style>
+        table {
+            border: 1px solid #000;
+        }
+
+
         th {
             text-align: left !important;
         }
+            
+        .stButton > button {
+            background-color:green;
+            color:white; 
+            border:white;   
+        }
+            
+        .stButton > button:hover {
+            background-color:#ccc;
+            color:white;    
+            border:white;   
+        }
+            
+             
     </style>
 """, unsafe_allow_html=True)
 
