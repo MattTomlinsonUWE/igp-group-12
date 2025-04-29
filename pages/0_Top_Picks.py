@@ -103,10 +103,10 @@ if os.path.exists(csv_path):
                         st.switch_page("pages/2_Earnings_Strategies.py")
                     if col_name == "Sell in May":
                         st.session_state['ticker'] = row['Ticker']
-                        st.switch_page("pages/4_Sell_in_May Strategies.py")
+                        st.switch_page("pages/4_Sell_in_May_Strategies.py")
                     if col_name == "Easter":
                         st.session_state['ticker'] = row['Ticker']
-                        st.switch_page("pages/5_Easter_Holiday_Strategies.py")
+                        st.switch_page("pages/5_Easter_Strategies.py")
                     if col_name == "Christmas":
                         st.session_state['ticker'] = row['Ticker']
                         st.switch_page("pages/6_Christmas_Strategies.py")
