@@ -24,25 +24,39 @@ st.set_page_config(
 
 # Display the disclaimer
 with st.sidebar:
-    st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in the event that you do, no liability will be accepted for any losses.")
+    st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in teh event that you do, no liability will be accepted for any losses.")
 
-st.write("# Stock pricing seasonality exploration")
+st.write("# Analysing and predicting seasonal effects on stock pricing")
 
 st.markdown(
     """
-    Most non-professional stock market investors fail to realise the impact that seasonal trends have on the price of the shares that they buy and sell. 
-
-    The price of a share can often be significantly above-trend during periods such as before an earning announcement, or depressed in a run up to a dividend payment. 
-
-    This can also happen at certain periods of the year, such as around Christmas and Easter holidays. 
-
-    For some shares this can be predicted with reasonable certainty, leading to not only to be able to buy and sell at the most advantageous time, but also to potentially employ short-term trading strategies.   
-
-    For each of the most common strategies we've outlined the main effects, and also compiled our top picks. 
+    This project investigates recurring seasonal patterns in stock prices—such as those around dividends, earnings, and holidays—that are often overlooked by retail trading platforms despite long-standing academic evidence. By statistically validating these effects and packaging them into a user-friendly tool, the project empowers individual investors to make more informed, timing-sensitive decisions that challenge the assumptions of market efficiency.
     
-    Click the left hand menu to learn more.  
+    ## Top Picks
 
-    """
+    A summary of the most exploitable strategies based on our analysis.
+
+    ## Dividend Strategies
+
+    Analysis of the effects of dividend announcement and payment on stock prices. 
+
+    ## Earnings Strategies
+
+    Analysis of the effects of earnings announcements on stock prices. 
+
+    ## Sell in May Strategies
+
+    Analysis of the effects of exploiting the historical observation that stock market returns tend to be weaker in the six-month period from May to October compared to the period from November to April.
+
+    ## Easter Strategies
+
+    Analysis of the effects of exploiting variations in stock prices around the Easter holiday. 
+
+    ## Christmas Strategies
+
+    Analysis of the effects of exploiting variations in stock prices around the Christmas holiday. 
+
+"""
     )
 
 
