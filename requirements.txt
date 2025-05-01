@@ -1,7 +1,7 @@
 #requirements.txt
 streamlit==1.32.2
 polygon-api-client==1.13.4
-yfinance
+yfinance==2.5.4
 python-dotenv
 pandas
 numpy
