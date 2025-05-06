@@ -98,6 +98,9 @@ if os.path.exists(csv_path):
                 if cols[j].button(cell_value, key=key):
                     st.success(f"Clicked: {row['Ticker']} - '{col_name}' = {cell_value}")
                     # You can trigger any custom action here
+                    if col_name == "Dividend":
+                        st.session_state['ticker'] = row['Ticker']
+                        st.switch_page("pages/1_Dividend_Strategies.py")
                     if col_name == "Earnings":
                         st.session_state['ticker'] = row['Ticker']
                         st.switch_page("pages/2_Earnings_Strategies.py")
