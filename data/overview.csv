@@ -1,22 +1,27 @@
-﻿Ticker,Stock,Dividend,Earnings,Christmas,Easter,Sell in May
+Ticker,Stock,Dividend,Earnings,Christmas,Easter,Sell in May
 AAPL,Apple,Null,Positive,Null,Positive,Null
+AMCR,Amcor plc,Positive,Null,Null,Null,Null
 AME,AMETEK Inc,Null,Null,Null,Null,Positive
 AMD,"Advanced Micro Devices, Inc.",Null,Positive,Null,Null,Null
 AMZN,Amazon,Null,Positive,Null,Positive,Null
 AVGO,Broadcom Inc.,Null,Positive,Null,Null,Null
 CBRE,CBRE Group Inc,Null,Null,Null,Null,Positive
-EL,"Estee Lauder",Null,Null,Null,Null,Positive
+EL,Estee Lauder,Null,Null,Null,Null,Positive
 EMN,Eastman Chemical Company,Null,Null,Null,Null,Positive
 EW,Edwards Lifesciences Corporation,Null,Null,Null,Null,Positive
+F,Ford Motor Company,Positive,Null,Null,Null,Null
 MLM,Martin Marietta Materials,Null,Null,Null,Null,Positive
+MO,"Altria Group, Inc.",Positive,Null,Null,Null,Null
 MSFT,Microsoft,Null,Positive,Null,Positive,Null
 NFLX,"Netflix, Inc.",Null,Positive,Null,Null,Null
 NVDA,NVIDIA Corporation,Null,Positive,Null,Null,Positive
+OKE,"ONEOK, Inc.",Positive,Null,Null,Null,Null
 PH,Parker-Hannifin Corporation,Null,Null,Null,Null,Positive
 RTX,RTX Corporation,Null,Null,Null,Null,Positive
 TPR,Tapestry Inc,Null,Null,Null,Null,Positive
 TSLA,Tesla,Null,Null,Null,Positive,Null
 UNH,UnitedHealth Group Incorporated,Null,Positive,Null,Null,Null
 V,Visa Inc.,Null,Positive,Null,Null,Null
+WMB,"The Williams Companies, Inc.",Positive,Null,Null,Null,Null
 WMT,Walmart,Null,Null,Null,Positive,Null
 WYNN,Wynn Resorts,Null,Null,Null,Null,Positive
