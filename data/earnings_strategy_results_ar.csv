@@ -1,4 +1,4 @@
-Ticker,Buy_Day,Sell_Day,Max_Avg_Abnormal_Return
+﻿Ticker,Buy_Day,Sell_Day,Max_Avg_Abnormal_Return
 NVDA,0,1,0.035747042
 AVGO,-5,1,0.03055622
 INTC,1,5,0.024501494

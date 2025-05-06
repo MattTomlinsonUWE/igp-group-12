@@ -1,4 +1,4 @@
-Ticker,Buy_Day,Sell_Day,Max_Avg_Cumulative_Abnormal_Return
+﻿Ticker,Buy_Day,Sell_Day,Max_Avg_Cumulative_Abnormal_Return
 AVGO,-10,10,0.079282371
 NVDA,-10,10,0.074334615
 AMD,-4,10,0.050582597
