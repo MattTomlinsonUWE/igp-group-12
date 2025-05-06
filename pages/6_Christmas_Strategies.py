@@ -68,9 +68,7 @@ def fetch_stock_data(ticker):
     data = yf.download(ticker, start=start_date, end=end_date, auto_adjust=False)
     data.reset_index(inplace=True)
     data.set_index(['Date'])
-    data['Daily_Return'] = data['Adj Close'].pct_change()
-    #
-    data['Cumulative_Return'] = (1 + data['Daily_Return']).cumprod()
+
     data.columns = [col[0] if isinstance(col, tuple) else col for col in data.columns]  # Flatten column names
     
     #st.write(data.columns)
@@ -81,7 +79,12 @@ def fetch_stock_data(ticker):
         for year in range(2004, 2025)
     ])
 
+    # Calculate Daily returns
+    filtered_data['Daily_Return'] = filtered_data['Adj Close'].pct_change()
+    filtered_data['Cumulative_Return'] = (1 + filtered_data['Daily_Return']).cumprod()
+
     return filtered_data, data
+
 
 # Calculate annualized returns
 def calculate_annualized_return(selected_period):
@@ -123,12 +126,26 @@ def annualized_returns(returns):
 # Yearly cumulative returns
 def calculate_yearly_returns(filtered_data):
     
-    yearly_returns = (
-        filtered_data.groupby(filtered_data['Date'].dt.year)['Daily_Return']
-        .apply(lambda x: (1 + x).prod() - 1) * 100
-    )
-    
-    return yearly_returns.reset_index(name='Return(%)')
+    # Ensure the data is sorted by date
+    filtered_data = filtered_data.sort_values('Date')
+
+    # Extract year from date
+    filtered_data['Year'] = filtered_data['Date'].dt.year
+
+    yearly_returns = []
+
+    for year, group in filtered_data.groupby('Year'):
+        april_open = group.iloc[0]['Open']
+        april_close = group.iloc[-1]['Close']
+        april_return = (april_close - april_open) / april_open
+        yearly_returns.append({'Year': year, 'Return(%)': april_return * 100})
+
+        # Create a DataFrame of returns
+        returns_df = pd.DataFrame(yearly_returns)
+        
+        # Display the results
+    #st.write(returns_df)
+    return returns_df
 
 ##Stats
 def calculate_return_stats(df, annualized_return, cumulative_return):
@@ -166,14 +183,14 @@ annual_returns= calculate_yearly_returns(selected_period)
 avgannualreturns = annual_returns['Return(%)'].values
 annualized_return = annualized_returns(avgannualreturns)
 #st.header("% Cumulative Returns")
-cumulative_return = data['Cumulative_Return'].iloc[-1]
+cumulative_return = selected_period['Cumulative_Return'].iloc[-1]
 calculate_return_stats(annual_returns, annualized_return, cumulative_return)
 
 # Display in Streamlit
 st.subheader("% Annual Returns")
 with st.container(key='colored-background-4'):
     st.write("Below graph displays %Annual Returns during Christmas period.")
-    fig = px.bar(annual_returns, x='Date', y='Return(%)', labels={'Date': 'Year', 'Return(%)': 'Annual Return (%)'}, text=[f"{x:.1f}%" for x in annual_returns['Return(%)']])
+    fig = px.bar(annual_returns, x='Year', y='Return(%)', labels={'Year': 'Year', 'Return(%)': 'Annual Return (%)'}, text=[f"{x:.1f}%" for x in annual_returns['Return(%)']])
     # Customize text position and appearance
     fig.update_traces(
         textposition='outside',
@@ -203,8 +220,12 @@ st.subheader("Risk metrics")
 with st.container(key='colored-background-5'):
     st.write("Risk-adjusted metrics help investors understand not just how much return an investment generated, but how much risk was taken to achieve it.")
     st.write(f"**Standard Deviation (Annualized):** {std_dev:.2f}")
+    st.write(f"**Standard deviation is employed to measure the volatility of investment returns.")
     st.write(f"**Sharpe Ratio (Risk-Free=0):** {sharpe_ratio:.2f}")
+    st.write(f"**Sharpe Ratio evaluates returns relative to risk, considering volatility. Higher the ratio, better the risk-adjusted performance.")
     st.write(f"**Sortino Ratio:** {sortino_ratio:.2f}")
+    st.write(f"**Sortino Ratio focuses on downside risk, making it more relevant for risk-averse investors. It’s useful in asymmetric return distributions.")
+
 
     #st.write(selected_period)
 
@@ -224,24 +245,6 @@ with st.container(key='colored-background-6'):
     )
     st.plotly_chart(fig)
 
-
-# One-sample T-test (H₀: Mean return = 0)
-t_stat, p_value = stats.ttest_1samp(selected_period['Daily_Return'], popmean=0)
-
-# Display results
-st.subheader("Statistical Significance:")
-with st.container(key='colored-background-7'):
-    st.write("his analysis helps in validating robustness and testing hypothesis. In this case it validates if the returns are significant.")
-    st.write("T-Statistics: Used to test hypotheses about returns, ensuring statistical significance.")
-    st.write("P-Value: Indicates the probability of observing results under a null hypothesis, aiding decision-making. Low p-value (<0.05) confirms statistical significance.")
-    st.subheader(f"**T-statistic:** {t_stat:.2f}")
-    st.subheader(f"**P-value:** {p_value:.4f}")
-
-
-    if p_value < 0.05:
-        st.success("Reject H₀: Returns are statistically significant (≠ 0).")
-    else:
-        st.error("Fail to reject H₀: Returns are not significantly different from 0.")
 
 # Forecasting with Prophet
 st.subheader("Stock Price Prediction using Prophet:")

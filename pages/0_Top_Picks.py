@@ -113,5 +113,3 @@ if os.path.exists(csv_path):
 
 else:
     st.error(f"File '{csv_path}' not found. Please make sure it exists in the app directory.")
-
-
