@@ -50,26 +50,18 @@ tickers_idx = tickers.index(symbol)
 st.write("# Stock Market Seasonality Strategies")
 st.write("## Earnings Strategies")
 
-# 1. Load Data
-events = pd.read_csv("./data/earnings_events.csv", parse_dates=["Ann Date"]) #holds each earnings announcement’s metadata
-meta   = pd.read_csv("./data/earnings_meta.csv",   parse_dates=["Ann Date"]) #holds the historical surprises
-ar     = pd.read_csv("./data/earnings_ar.csv",     index_col=0) #holds the abnormal returns (ARs) for windows around each event
+# 1. Load Core Data
+events = pd.read_csv("./data/earnings_strategy_events.csv", parse_dates=["Ann Date"])
+meta   = pd.read_csv("./data/earnings_strategy_meta.csv",   parse_dates=["Ann Date"])
+ar     = pd.read_csv("./data/earnings_strategy_ar.csv",     index_col=0)
 
-#Clean the Surprise column
+# Clean Surprise column
 meta["Surprise"] = pd.to_numeric(meta["Surprise"], errors="coerce")
 meta["Surprise"] = meta["Surprise"].replace([np.inf, -np.inf], np.nan)
 
 # 2. Build event_id & reindex meta
-#Create a unified key
-#Concatenate ticker and announcement date
-events["event_id"] = (
-    events["Ticker"] + " | " +
-    events["Ann Date"].dt.date.astype(str)
-)
-meta["event_id"] = (
-    meta["Ticker"] + " | " +
-    meta["Ann Date"].dt.date.astype(str)
-)
+events["event_id"] = events["Ticker"] + " | " + events["Ann Date"].dt.date.astype(str)
+meta["event_id"]   = meta["Ticker"]   + " | " + meta["Ann Date"].dt.date.astype(str)
 meta = meta.set_index("event_id")
 
 # 3. Prepare CAR windows
@@ -77,9 +69,9 @@ car0  = ar["0"]
 car1  = ar[["-1","0","1"]].sum(axis=1)
 car11 = ar.loc[:, [str(i) for i in range(-5,6)]].sum(axis=1)
 windows = {
-    "CAR(0,0)":    car0,
-    "CAR(-1,+1)":  car1,
-    "CAR(-5,+5)":  car11
+    "CAR(0,0)"   : car0,
+    "CAR(-1,+1)" : car1,
+    "CAR(-5,+5)" : car11
 }
 
 # Draw the tickers list on the sidebar
@@ -100,23 +92,24 @@ with st.container(key='colored-background-2'):
 # Determine CAR series for selected window
 car_series = windows[window]
 
-# 4.2 Filter for selected ticker
-ev     = events[events["Ticker"] == ticker].sort_values("Ann Date") #all announcement rows for that ticker, sorted by date
-ar_sub = ar.loc[ev["event_id"].values] #abnormal returns for those events
-md     = meta.loc[ev["event_id"].values]  #corresponding surprises for those events.
+# 4.2 Filter Data for Selected Ticker
+car_series = windows[window]
+ev     = events[events["Ticker"] == ticker].sort_values("Ann Date")
+ar_sub = ar.loc[ev["event_id"].values]
+md     = meta.loc[ev["event_id"].values]
 
 # 4.3 Key Metrics 
 st.subheader("Key Metrics")
 with st.container(key='colored-background-3'):
     st.markdown("_Average & most recent abnormal returns around earnings._")
+    st.markdown("Use these metrics to see typical earnings impact and how the latest event compares.")
 
     car_win       = car_series.loc[ev["event_id"]]
-    avg_car       = car_win.mean() #average CAR over history.
+    avg_car       = car_win.mean()
     last_eid      = ev.iloc[-1]["event_id"]
     last_surprise = md.loc[last_eid, "Surprise"]
     last_car      = car_win.loc[last_eid]
-    n_events      = len(ev) #count of announcements.
-
+    n_events      = len(ev)
     k1, k2, k3, k4 = st.columns(4)
     k1.metric(f"Avg {window}",  f"{avg_car:.2%}")
     k2.metric("Last Surprise",  f"{last_surprise:.1%}")
@@ -126,45 +119,46 @@ with st.container(key='colored-background-3'):
 # 5. Ranking Section 
 st.subheader(f"Ranking: Average {window} by Ticker")
 with st.container(key='colored-background-4'):
+    st.markdown("Compare tickers by their average CAR to identify top and bottom performers.")
     df_rank = (
-        pd.DataFrame({"event_id": car_series.index, "CAR": car_series.values}) #Build a DataFrame of every event_id → CAR value.
-        .merge(events[["event_id","Ticker"]], on="event_id") #Merge back to get the ticker.
-        .groupby("Ticker", as_index=False)["CAR"].mean() #Group by ticker to compute the mean CAR.
-        .sort_values("CAR", ascending=False) #Sort descending and show as a table.
+        pd.DataFrame({"event_id": car_series.index, "CAR": car_series.values})
+          .merge(events[["event_id","Ticker"]], on="event_id")
+        .groupby("Ticker", as_index=False)["CAR"].mean()
+        .sort_values("CAR", ascending=False)
     )
     st.dataframe(
-        df_rank.rename(columns={"CAR": f"Avg {window}"}) 
-               .style.format({f"Avg {window}": "{:.1%}"})
+        df_rank.rename(columns={"CAR": f"Avg {window}"})
+           .style.format({f"Avg {window}": "{:.1%}"})
     )
 
 # 6. Earnings History Table
 st.subheader("Earnings History")
 with st.container(key='colored-background-5'):
-    st.markdown("_Full list of announcement dates, surprises, and CARs._")
+    st.markdown("Review each past announcement’s date, surprise, and CAR in one table.")
 
     df_table = ev[["event_id","Ann Date"]].copy()
     df_table["Surprise"]   = df_table["event_id"].map(md["Surprise"])
     df_table["CAR(0,0)"]   = ar_sub["0"].values
     df_table["CAR(-1,+1)"] = car_series.loc[ev["event_id"]].values
     df_table["CAR(-5,+5)"] = ar_sub.loc[:, [str(i) for i in range(-5,6)]].sum(axis=1).values
-
     st.dataframe(
         df_table
-            .sort_values("Ann Date", ascending=False)
-            .rename(columns={"Ann Date":"Date"})
-            .style.format({
-                "Surprise"   : "{:.1%}",
-                "CAR(0,0)"   : "{:.1%}",
-                "CAR(-1,+1)" : "{:.1%}",
-                "CAR(-5,+5)" : "{:.1%}"
-          }),
-        height=300
+        .sort_values("Ann Date", ascending=False)
+        .rename(columns={"Ann Date":"Date"})
+        .style.format({
+         "Surprise"   : "{:.1%}",
+         "CAR(0,0)"   : "{:.1%}",
+         "CAR(-1,+1)" : "{:.1%}",
+         "CAR(-5,+5)" : "{:.1%}"
+        }),
+    height=300
     )
+
 
 # 7. Latest AR Curve (window-sensitive)
 st.subheader("Latest AR Curve")
 with st.container(key='colored-background-6'):
-    st.markdown(f"_Abnormal returns around {last_eid.split(' | ')[1]} for {window}._")
+    st.markdown("Visualize the abnormal return trajectory around the most recent earnings date.")
     #Pick only the days in your chosen window.
     full_ar = ar_sub.loc[last_eid].astype(float)
     if window == "CAR(0,0)":
@@ -173,22 +167,19 @@ with st.container(key='colored-background-6'):
         days = ["-1","0","1"]
     else:
         days = [str(i) for i in range(-5,6)]
-    #Build a small DataFrame with Day vs AR.
     df_curve = (
         full_ar.loc[days]
-            .rename_axis("Day")
-            .reset_index(name="AR")
-            .assign(Day=lambda d: d.Day.astype(int))
-            .set_index("Day")
+           .rename_axis("Day")
+           .reset_index(name="AR")
+           .assign(Day=lambda d: d.Day.astype(int))
+           .set_index("Day")
     )
-    st.line_chart(df_curve) #Render as a line chart.
+    st.line_chart(df_curve)
 
 # 8. Surprise vs. CAR Scatter
 st.subheader("Surprise vs. Return")
 with st.container(key='colored-background-7'):
-    st.markdown(f"_Each event’s EPS surprise versus its {window}._")
-    #Plot every historical surprise vs that window’s CAR.
-    #Tooltip shows date, surprise, and CAR for each point.
+    st.markdown("Inspect how EPS surprise correlates with the selected CAR window.")
     df_sc = pd.DataFrame({
         "Surprise": md["Surprise"].values,
         "CAR"     : car_win.values,
@@ -201,40 +192,26 @@ with st.container(key='colored-background-7'):
     ).interactive()
     st.altair_chart(scatter, use_container_width=True)
 
-
 # 9. Build & fit cross-sectional model for selected window
 st.subheader("Forecast Next Event CAR")
 with st.container(key='colored-background-8'):
-    upcoming = pd.read_csv("./data/earnings_upcoming_surprises.csv", parse_dates=["Ann Date"])
-    upcoming["Surprise"] = pd.to_numeric(upcoming["Surprise"], errors="coerce")
-    # use CSV’s built-in event_id
+    st.markdown("Select a future event to view its predicted CAR and 95% confidence interval.")
+    # Load only the predictions CSV and build event_id
+    upcoming = pd.read_csv("./data/earnings_strategy_upcoming_predictions.csv", parse_dates=["Ann Date"])
+    upcoming["event_id"] = upcoming["Ticker"] + " | " + upcoming["Ann Date"].dt.date.astype(str)
 
+    # User selects which future event to display
+    choice = st.selectbox("Pick an upcoming event", upcoming["event_id"])
+    sel    = upcoming.set_index("event_id").loc[choice]
 
-    # prepare regression target for chosen window
-    target = windows[window].rename("CARw") #target holds the historical CARs for the window, indexed by event.
-    df_temp  = pd.DataFrame({
-        "event_id": target.index,
-        "CARw":     target.values
-    })
-    df_pred = (
-        df_temp
-        .merge(meta[["Surprise"]].reset_index(), on="event_id", how="left") #Merge with the historical surprises so you have (Surprise, CARw) pairs.
-        .dropna(subset=["Surprise","CARw"])
+    pred_car = sel["Pred_CAR_1"]
+    ci_lo    = sel["CI_lower"]
+    ci_hi    = sel["CI_upper"]
+
+    # Show the precomputed values
+    st.metric(
+        label = f"Predicted {window} for {choice}",
+        value = f"{pred_car:.2%}",
+        delta = None
     )
-    #Fit simple OLS (CARw = γ₀ + γ₁·Surprise)
-    #Compute slope γ₁ via cov(x,y)/var(x)
-    #Compute intercept γ₀ so the line goes through the means.
-    if df_pred.empty:
-        st.warning("No historical Surprise+CAR data to fit model.")
-        gamma0, gamma1 = 0.0, 0.0
-    else:
-        x, y = df_pred["Surprise"].values, df_pred["CARw"].values
-        xm, ym = x.mean(), y.mean()
-        gamma1 = ((x - xm)*(y - ym)).sum() / ((x - xm)**2).sum()
-        gamma0 = ym - gamma1*xm
-
-    # upcoming-event prediction
-    choice    = st.selectbox("Pick an upcoming event", upcoming["event_id"])
-    next_surp = upcoming.set_index("event_id").loc[choice, "Surprise"]
-    pred_car  = gamma0 + gamma1 * next_surp
-    st.metric(f"Predicted {window} for {choice}", f"{pred_car:.2%}")
+    st.write(f"95% CI: [{ci_lo:.2%}, {ci_hi:.2%}]")
