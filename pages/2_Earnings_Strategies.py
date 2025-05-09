@@ -74,20 +74,32 @@ windows = {
     "CAR(-5,+5)" : car11
 }
 
+found = True
+
+# Handle if the choice is not available
+try:
+    tickers_idx = sorted(events["Ticker"].unique()).index(symbol)
+except Exception as e:
+    found = False
+    ticker = symbol 
+
 # Draw the tickers list on the sidebar
 with st.sidebar:
-    # We replace our original ticker with the revised list
-    #symbol = st.selectbox("Search for a Stock Ticker", tickers, index=tickers_idx)
-    tickers_idx = sorted(events["Ticker"].unique()).index(symbol)
-    ticker = st.selectbox("Choose a ticker", sorted(events["Ticker"].unique()),tickers_idx)
-    window = st.selectbox("Choose CAR window", list(windows.keys()))
+    if found:
+        ticker = st.selectbox("Choose a ticker", sorted(events["Ticker"].unique()),tickers_idx)
+        window = st.selectbox("Choose CAR window", list(windows.keys()))
     st.write("**Disclaimer:** The following information is provided for informational purposes only and is not investment advice. You should not make investments based on this advice and in the event that you do, no liability will be accepted for any losses.")
+
 
 draw_header_with_yahoo(ticker)
 
 st.write("### Strategy overview")
 with st.container(key='colored-background-2'):
     st.write("This strategy takes advantage of predictable increases in stock price around the date of earnings announcements. ")
+
+if found == False:
+    st.error("No data for this stock.")
+    st.stop()
 
 # Determine CAR series for selected window
 car_series = windows[window]
