@@ -561,6 +561,10 @@ def draw_header_with_yahoo(symbol,minimal=False):
             border-radius: 15px;
             padding:20px
         }
+
+        div.st-key-colored-background > div,div.st-key-colored-background-2,div.st-key-colored-background-3 > div,div.st-key-colored-background-4 > div,div.st-key-colored-background-5 > div,div.st-key-colored-background-6 > div,div.st-key-colored-background-7 > div,div.st-key-colored-background-8 > div,div.st-key-colored-background-9 > div  {
+            width:100%;
+        }
     </style>
 
     <table>
