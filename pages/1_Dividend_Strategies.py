@@ -54,11 +54,6 @@ st.write("### Strategy overview")
 with st.container(key='colored-background-2'):
     st.write("This strategy focuses on identifying stocks which exhibit abnormal price and trading volume volatility during this dividend declaration to payment period. We test a 'dividend capture' strategy, buying the day before the ex-dividend date and selling the day after.")
 
-#st.write("### Does the strategy work for this stock?")
-#with st.container(key='colored-background-3'):
-
-
-
 POLYGON_API_KEY = "Gby2JUpAVNhvfGbWR29CjzqqIpsRCdN8"
 
 client = RESTClient("Gby2JUpAVNhvfGbWR29CjzqqIpsRCdN8")
@@ -66,7 +61,7 @@ client = RESTClient("Gby2JUpAVNhvfGbWR29CjzqqIpsRCdN8")
 try:
     details = client.get_ticker_details(symbol)    
 except Exception as e:
-    st.error("Problems encountered retrieving stock")
+    st.error("Problems encountered retrieving stock data")
     st.stop()
 
 # Use Yahoo Finance and Polygon to determine if we have extra trading volume 
@@ -112,15 +107,14 @@ def analyze_price_volatility(ticker_symbol, period="5y", window=20, days_before=
 
         dividend_periods = hist[hist['IsDividendWeek']]
         normal_periods = hist[~hist['IsDividendWeek']]
-
         
         avg_div_spike = dividend_periods['PriceSpike'].mean()
         avg_non_div_spike = normal_periods['PriceSpike'].mean()
 
         return {
             "Ticker": ticker_symbol,
-            "AvgVolumeSpikeDiv": round(avg_div_spike, 2),
-            "AvgVolumeSpikeNonDiv": round(avg_non_div_spike, 2)
+            "AvgPriceSpikeDiv": round(avg_div_spike, 2),
+            "AvgPriceSpikeNonDiv": round(avg_non_div_spike, 2)
         }
 
     except Exception as e:
@@ -218,7 +212,7 @@ def analyze_dividend_price_behavior(ticker_symbol, period="5y", window=20, days_
                 "AvgPriceDiv": None,
                 "AvgPriceNonDiv": None,
                 "Return Diff (%)": None,
-                "P-Value": None
+                "PValue": None
             }
 
         # Calculate average returns
@@ -263,15 +257,15 @@ with st.container(key='colored-background-3'):
     long_term_price = analyze_price_volatility(symbol)
 
     if long_term_price is not None:
-        if long_term_price["AvgVolumeSpikeNonDiv"] >= long_term_price["AvgVolumeSpikeDiv"]:
+        if long_term_price["AvgPriceSpikeNonDiv"] >= long_term_price["AvgPriceSpikeDiv"]:
             st.write(f"No, price volatility is less during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
             st.write("Therefore **no extra caution** is required when trading.")
         else:
             st.write(f"Yes, price volatility is more during the dividend period (+-3 days around the ex-dividend date to dividend pay date).")
             st.write("Therefore **extra caution** is required when trading.")
 
-        st.write(f" - Average Price Spike in Dividend Period: {long_term_price["AvgVolumeSpikeDiv"]}")
-        st.write(f" - Average Price Spike in Non-Dividend Period: {long_term_price["AvgVolumeSpikeNonDiv"]}")
+        st.write(f" - Average Price Spike in Dividend Period: {long_term_price["AvgPriceSpikeDiv"]}")
+        st.write(f" - Average Price Spike in Non-Dividend Period: {long_term_price["AvgPriceSpikeNonDiv"]}")
     else:
         st.write("No dividends in period.")
 
@@ -289,8 +283,17 @@ with st.container(key='colored-background-3'):
         
         st.write(f" - Average Price in Dividend Period (excluding dividend): {long_term_return["AvgPriceDiv"]}")
         st.write(f" - Average Price in Non-Dividend Period: {long_term_return["AvgPriceNonDiv"]}")
+
+        if long_term_return["PValue"] < 0.05:
+            st.write(f"p-value is {long_term_return["PValue"]}, the price difference is statistically significant.")
+        else: 
+            st.write(f"p-value is {long_term_return["PValue"]}, the price difference is not statistically significant.")
     else: 
         st.write("No dividends in period.")
+
+    
+
+    
 
 def calculate_and_plot_average_return(stock_data, df_events, window=1):
     results = []
